@@ -1,0 +1,14 @@
+{
+    "name": "Developermail",
+    "alias": "developermail",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Developermail\\Providers\\DevelopermailServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

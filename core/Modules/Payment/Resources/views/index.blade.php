@@ -1,0 +1,97 @@
+@extends('layouts.master')
+
+@push('script')
+<!-- DataTables -->
+
+<link rel="stylesheet" href="{{asset('assets/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
+<link rel="stylesheet" href="{{asset('assets/ladda/css/ladda-themeless.min.css')}}">
+
+@endpush
+
+@section('content')
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      Payment Management
+      <small>All payments in the system</small>
+    </h1>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+
+    <!-- Default box -->
+    <div class="box">
+      <div class="box-header with-border">
+        <h3 class="box-title">Payment List</h3>
+
+        <div class="box-tools pull-right">
+          <button type="button" class="btn btn-block btn-primary btn-sm" onclick="addClick()">Add Payment</button>
+        </div>
+      </div>
+      <div class="box-body">
+        <table class="table table-bordered table-striped dataTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Client</th>
+              <th>CC Clients</th>
+              <th>Service</th>
+              <th>Source</th>
+              <th>Amount</th>
+              <th>Duration</th>
+              <th>Start Date</th>
+              <th>Repeat</th>
+              <th>Repeat Type</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+    <!-- /.box -->
+
+  </section>
+  <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+@include('includes.form-modal')
+
+@endsection
+
+@push('script')
+
+<!-- DataTables -->
+<script src="{{asset('assets/bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('assets/ladda/js/spin.min.js')}}"></script>
+<script src="{{asset('assets/ladda/js/ladda.min.js')}}"></script>
+
+<script type="text/javascript">
+  let resource = 'payment';
+</script>
+<script src="{{asset('assets/js/crud.js')}}"></script>
+<script src="{{asset('assets/js/payment.js')}}"></script>
+
+
+<script type="text/javascript">
+	function toggleRepeatType(element) {
+
+		if($(element).is(':checked')){
+			$('select[name=repeat_type]').prop('disabled',false);
+		}else{
+			$('select[name=repeat_type]').prop('disabled',true);
+		}
+	}
+
+	function toggleRepeatDays(element) {
+		if(element.value == 'Custom'){
+			$('input[name=custom_duration]').prop('disabled',false);
+		}else{
+			$('input[name=custom_duration]').prop('disabled',true);
+		}
+	}
+</script>
+@endpush

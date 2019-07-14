@@ -1,0 +1,205 @@
+<?php
+
+namespace Modules\Payment\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Controller;
+use Modules\Payment\Http\Requests\PaymentRequest;
+use Modules\Payment\Entities\Payment;
+use Modules\Payment\Entities\EmailQueue;
+use Modules\Client\Entities\Client;
+use Modules\Service\Entities\Service;
+use DataTables;
+use Carbon\Carbon;
+
+class PaymentController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     * @return Response
+     */
+    public function index()
+    {
+          // $data = Payment::with('client','Ccclient','service')->get();
+
+        // dd($data);
+        return view('payment::index');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     * @return Response
+     */
+    public function create()
+    {
+        $clients = Client::all();
+        $services = Service::all();
+        return view('payment::create',compact('clients','services'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     * @param  Request $request
+     * @return Response
+     */
+    public function store(PaymentRequest $request)
+    {
+        $payment = new Payment();
+        $payment->client_id = $request->client;
+        $payment->cc_client_id = $request->cc_client;
+        $payment->service_id = $request->service;
+        $payment->service_source = $request->source;
+        $payment->amount = $request->amount;
+        $payment->duration = $request->duration;
+        $payment->start_date = $request->start_date;
+        if($request->repeat){
+            $payment->repeat = 1;
+            $payment->repeat_type = $request->repeat_type;
+            if($request->repeat_type == "Custom"){
+                $payment->custom_duration = $request->custom_duration;
+            }
+        }else{
+            $payment->repeat = 0;
+        }
+
+        $payment->save();
+
+        $date = Carbon::parse($request->start_date);
+        switch ($request->repeat_type) {
+            case 'Daily':
+
+            $date->addDay();
+            break;
+            case 'Weekly':
+            $date->addWeek();
+            break;
+            case 'Monthly':
+            $date->addMonth();
+            break;
+            case 'Quarterly':
+            $date->addMonths(4);
+            break;
+            case 'By Annually':
+            $date->addMonths(6);
+            break;
+            case 'Annually':
+            $date->addYear();
+            break;
+            case 'Custom':
+            $date->addDays($request->custom_duration);
+            break;
+
+            default:
+            break;
+        }
+
+        // $template_data['customer_name']
+        // $template_data['service_source']
+        // $template_data['service_name']
+        // $template_data['service_source']
+        // $template_data['start_date']
+        // $template_data['repeat_date']
+
+        // $email_queue = new EmailQueue();
+        // $email_queue->payment_id = $payment->id;
+        // $email_queue->date = $date->toDateString();
+        // $email_queue->content = EmailQueue::getTemplate($template_data);
+        // $email_queue->status = 0;
+        // $email_queue->save();
+
+
+        return response()->json(['msg'=>'Payment Added Successfully!'], 200);
+    }
+
+    /**
+     * Show the specified resource.
+     * @return Response
+     */
+    public function show()
+    {
+        return view('payment::show');
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     * @return Response
+     */
+    public function edit($id)
+    {
+      $clients = Client::all();
+      $services = Service::all();
+      $payment = Payment::find($id);
+      return view('payment::edit',compact('clients','services','payment'));
+  }
+
+    /**
+     * Update the specified resource in storage.
+     * @param  Request $request
+     * @return Response
+     */
+    public function update(PaymentRequest $request)
+    {
+
+
+
+        return view('payment::edit',compact('clients','services'));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     * @return Response
+     */
+    public function destroy($id)
+    {
+       Payment::find($id)->delete();
+       return response()->json(['msg'=>'Payment Removed Successfully!'], 200);
+   }
+
+   public function data($value='')
+   {
+    $data = Payment::with('client','client_2','service')->get();
+
+    return DataTables::make($data)
+    ->addIndexColumn()
+    ->addColumn('action', function ($row) {
+
+        $buttons = '';
+
+        $buttons .= '<button type="button" class="btn btn-default btn-sm" data-id="'.$row->id.'" onclick="editClick(this)">Edit</button>'; 
+        $buttons .= '<button type="button" class="btn btn-default btn-sm" data-id="'.$row->id.'" onclick="deleteClick(this)">Delete</button>'; 
+
+        // $buttons = '<button href="javascript:;" class="btn btn-icon-only green data-edit" title="Edit" data-id="'.$row->id.'" onclick="editClick(this)">
+        // <i class="fa fa-edit"></i>
+        // </button>';
+
+        // $buttons .= '<a href="javascript:;" class="btn btn-icon-only red data-delete" title="Delete" data-id="'.$row->id.'" onclick="deleteClick(this)"">
+        // <i class="fa fa-times"></i>
+        // </a>';
+
+        return $buttons;
+    })
+    ->editColumn('repeat', function ($row) {
+
+        switch ($row->repeat) {
+            case 0:
+            return 'No Repeat';
+            break;
+
+            case 1:
+            return 'Repeat';
+            break;
+        }
+
+    })
+    ->editColumn('repeat_type', function ($row) {
+
+     if($row->repeat_type == 'Custom'){
+        return 'Custom' . '(' . $row->custom_duration . ' days)';
+    }else{
+        return $row->repeat_type;
+    }
+})
+    ->make(true);
+}
+}

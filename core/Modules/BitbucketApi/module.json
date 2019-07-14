@@ -1,0 +1,14 @@
+{
+    "name": "BitbucketApi",
+    "alias": "bitbucketapi",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\BitbucketApi\\Providers\\BitbucketApiServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

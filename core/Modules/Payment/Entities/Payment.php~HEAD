@@ -1,0 +1,25 @@
+<?php
+
+namespace Modules\Payment\Entities;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Payment extends Model
+{
+	protected $fillable = [];
+
+	public function client()
+	{
+		return $this->belongsTo('Modules\Client\Entities\Client', 'client_id', 'id');
+	}
+
+	public function client_2()
+	{
+		return $this->belongsTo('Modules\Client\Entities\Client', 'cc_client_id', 'id');
+	}
+
+	public function service()
+	{
+		return $this->belongsTo('Modules\Service\Entities\Service', 'service_id', 'id');
+	}
+}

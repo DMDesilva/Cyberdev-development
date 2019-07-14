@@ -1,0 +1,14 @@
+{
+    "name": "VcrService",
+    "alias": "vcrservice",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\VcrService\\Providers\\VcrServiceServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

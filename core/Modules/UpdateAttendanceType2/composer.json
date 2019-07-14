@@ -1,0 +1,25 @@
+{
+    "name": "nwidart/updateattendancetype2",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\UpdateAttendanceType2\\Providers\\UpdateAttendanceType2ServiceProvider"
+            ],
+            "aliases": {
+                
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\UpdateAttendanceType2\\": ""
+        }
+    }
+}

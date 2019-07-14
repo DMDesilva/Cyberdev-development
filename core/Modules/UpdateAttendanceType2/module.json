@@ -1,0 +1,14 @@
+{
+    "name": "UpdateAttendanceType2",
+    "alias": "updateattendancetype2",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\UpdateAttendanceType2\\Providers\\UpdateAttendanceType2ServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

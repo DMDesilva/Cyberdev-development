@@ -1,0 +1,14 @@
+{
+    "name": "DeveloperMailLog",
+    "alias": "developermaillog",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\DeveloperMailLog\\Providers\\DeveloperMailLogServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
